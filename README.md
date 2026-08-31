@@ -1,4 +1,4 @@
-﻿# Odoo Custom Addons & Learning Portfolio
+# Odoo Custom Addons & Learning Portfolio
 
 Repository ini berisi kumpulan modul kustom (*custom addons*) Odoo v17 yang dikembangkan untuk pembelajaran dan simulasi kasus industri ERP nyata.
 
@@ -7,7 +7,7 @@ Repository ini berisi kumpulan modul kustom (*custom addons*) Odoo v17 yang dike
 ## 📦 Daftar Modul Kustom (`custom_addons/`)
 
 ### 1. `ksi_service_center` (Service Center & Warranty Management)
-Modul simulasi untuk manajemen perbaikan perangkat keras & klaim garansi (studi kasus IT Solution / Partner Axioo):
+Modul simulasi untuk manajemen perbaikan perangkat keras & klaim garansi (studi kasus PT Senyumin Saja / Partner Axioo):
 - **Master Perangkat:** Katalog model laptop & masa garansi default.
 - **Tiket Servis:** Penomoran otomatis (`ir.sequence`), tracking nomor seri (SN), dan penghitungan masa garansi otomatis.
 - **Suku Cadang & Biaya:** Penggantian spare parts (`One2many`), kalkulasi subtotal, dan perhitungan biaya akhir otomatis.

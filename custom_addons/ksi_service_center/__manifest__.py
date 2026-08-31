@@ -1,5 +1,5 @@
 {
-    'name': 'KSI Service Center & Warranty Management',
+    'name': 'PT Senyumin Saja - Service Center & Warranty Management',
     'version': '17.0.1.0.0',
     'category': 'Services/Hardware',
     'summary': 'Manajemen Servis Perangkat & Klaim Garansi Hardware (Partner Axioo)',

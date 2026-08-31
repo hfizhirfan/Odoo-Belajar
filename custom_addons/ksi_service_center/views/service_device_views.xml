@@ -22,6 +22,11 @@
         <field name="arch" type="xml">
             <form string="Model Perangkat">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_tickets" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="ticket_count" widget="statinfo" string="Riwayat Servis"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <label for="name" string="Nama Model Perangkat"/>
                         <h1>

@@ -23,7 +23,7 @@
                         <div class="row mb-4">
                             <div class="col-8">
                                 <h2 style="font-weight: bold; color: #1a365d; margin-bottom: 2px;">NOTA TANDA TERIMA SERVIS</h2>
-                                <p class="text-muted" style="font-size: 12px;">PT Kreator Solusi Informasi - Authorized Service Partner Axioo</p>
+                                <p class="text-muted" style="font-size: 12px;">PT Senyumin Saja - Authorized Service Partner Axioo</p>
                             </div>
                             <div class="col-4 text-end">
                                 <h4 style="font-weight: bold; color: #2b6cb0;"><span t-field="o.name"/></h4>
@@ -70,9 +70,9 @@
                                         <tr>
                                             <td style="padding: 2px 0; color: #718096;">Status Garansi:</td>
                                             <td style="padding: 2px 0;">
-                                                <span t-if="o.warranty_status == 'active'" class="badge bg-success">Garansi Aktif (Free)</span>
-                                                <span t-if="o.warranty_status == 'expired'" class="badge bg-danger">Garansi Habis</span>
-                                                <span t-if="o.warranty_status == 'unknown'" class="badge bg-secondary">Belum Terverifikasi</span>
+                                                <span t-if="o.warranty_status == 'active'" class="badge bg-success" style="color: #ffffff !important;">Garansi Aktif (Free)</span>
+                                                <span t-if="o.warranty_status == 'expired'" class="badge bg-danger" style="color: #ffffff !important;">Garansi Habis</span>
+                                                <span t-if="o.warranty_status == 'unknown'" class="badge bg-secondary" style="color: #ffffff !important;">Belum Terverifikasi</span>
                                             </td>
                                         </tr>
                                     </table>

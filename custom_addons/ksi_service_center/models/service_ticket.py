@@ -86,8 +86,19 @@ class ServiceTicket(models.Model):
     @api.constrains('state', 'diagnosis_notes')
     def _check_diagnosis_before_done(self):
         for ticket in self:
-            if ticket.state == 'done' and not ticket.diagnosis_notes:
-                raise ValidationError('Harap isi "Hasil Diagnosa Teknisi" sebelum menandai servis selesai!')
+            if ticket.state in ('done', 'delivered') and not ticket.diagnosis_notes:
+                raise ValidationError('Harap isi "Hasil Diagnosa Teknisi" sebelum menandai servis selesai atau menyerahkan unit!')
+
+    def write(self, vals):
+        if 'state' in vals and vals['state'] == 'delivered':
+            for ticket in self:
+                if ticket.state != 'done':
+                    raise ValidationError(
+                        'Unit belum selesai diperbaiki! Tiket harus melalui status "Selesai Diperbaiki" terlebih dahulu sebelum dapat diserahkan ke pelanggan.'
+                    )
+        if 'state' in vals and vals['state'] == 'done' and 'date_completed' not in vals:
+            vals['date_completed'] = fields.Date.today()
+        return super().write(vals)
 
     def action_start_repair(self):
         self.write({'state': 'in_progress'})
@@ -96,10 +107,7 @@ class ServiceTicket(models.Model):
         self.write({'state': 'waiting_parts'})
 
     def action_done(self):
-        self.write({
-            'state': 'done',
-            'date_completed': fields.Date.today()
-        })
+        self.write({'state': 'done'})
 
     def action_deliver(self):
         self.write({'state': 'delivered'})
@@ -111,4 +119,9 @@ class ServiceTicket(models.Model):
         self.write({'state': 'draft'})
 
     def action_print_report(self):
-        return self.env.ref('ksi_service_center.action_report_service_ticket').report_action(self)
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/report/pdf/ksi_service_center.report_service_ticket_template/{self.id}',
+            'target': 'new',
+        }
