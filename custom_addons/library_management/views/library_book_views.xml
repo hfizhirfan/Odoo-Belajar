@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_library_book_search" model="ir.ui.view">
+        <field name="name">library.book.search</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="author"/>
+                <field name="isbn"/>
+                <field name="category_id"/>
+                <filter name="available" string="Tersedia" domain="[('state', '=', 'available')]"/>
+                <filter name="borrowed" string="Dipinjam" domain="[('state', '=', 'borrowed')]"/>
+                <group expand="0" string="Kelompokkan">
+                    <filter name="group_category" string="Kategori" context="{'group_by': 'category_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_library_book_tree" model="ir.ui.view">
+        <field name="name">library.book.tree</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'available'" decoration-warning="state == 'borrowed'">
+                <field name="name"/>
+                <field name="author"/>
+                <field name="category_id"/>
+                <field name="isbn" optional="show"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_library_book_form" model="ir.ui.view">
+        <field name="name">library.book.form</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Dipinjam" bg_color="text-bg-warning" invisible="state != 'borrowed'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Judul buku..."/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="author"/>
+                            <field name="category_id"/>
+                            <field name="isbn"/>
+                        </group>
+                        <group>
+                            <field name="publisher"/>
+                            <field name="publication_year"/>
+                            <field name="state" widget="badge"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Riwayat Peminjaman">
+                            <field name="loan_ids" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="member_id"/>
+                                    <field name="loan_date"/>
+                                    <field name="return_date"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_library_book" model="ir.actions.act_window">
+        <field name="name">Buku</field>
+        <field name="res_model">library.book</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_library_book_search"/>
+    </record>
+</odoo>

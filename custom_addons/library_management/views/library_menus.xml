@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_library_root" name="Perpustakaan" sequence="20"/>
+
+    <menuitem id="menu_library_operations" name="Operasional" parent="menu_library_root" sequence="10"/>
+    <menuitem id="menu_library_loan" name="Peminjaman" parent="menu_library_operations" action="action_library_loan" sequence="10"/>
+
+    <menuitem id="menu_library_master" name="Data Master" parent="menu_library_root" sequence="20"/>
+    <menuitem id="menu_library_book" name="Buku" parent="menu_library_master" action="action_library_book" sequence="10"/>
+    <menuitem id="menu_library_member" name="Anggota" parent="menu_library_master" action="action_library_member" sequence="20"/>
+    <menuitem id="menu_library_category" name="Kategori Buku" parent="menu_library_master" action="action_library_category" sequence="30"/>
+</odoo>

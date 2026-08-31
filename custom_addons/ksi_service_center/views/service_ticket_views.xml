@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_service_ticket_tree" model="ir.ui.view">
+        <field name="name">service.ticket.tree</field>
+        <field name="model">service.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Tiket Servis" decoration-info="state == 'draft'" decoration-warning="state in ('in_progress', 'waiting_parts')" decoration-success="state in ('done', 'delivered')" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="customer_name"/>
+                <field name="customer_phone"/>
+                <field name="device_id"/>
+                <field name="serial_number"/>
+                <field name="warranty_status" widget="badge" decoration-success="warranty_status == 'active'" decoration-danger="warranty_status == 'expired'"/>
+                <field name="technician_id" widget="many2one_avatar_user"/>
+                <field name="total_cost" sum="Total"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state in ('in_progress', 'waiting_parts')" decoration-success="state in ('done', 'delivered')"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_service_ticket_form" model="ir.ui.view">
+        <field name="name">service.ticket.form</field>
+        <field name="model">service.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Tiket Servis">
+                <header>
+                    <button name="action_start_repair" string="Mulai Servis" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_wait_parts" string="Tunggu Spare Part" type="object" invisible="state != 'in_progress'"/>
+                    <button name="action_start_repair" string="Lanjut Servis" type="object" class="oe_highlight" invisible="state != 'waiting_parts'"/>
+                    <button name="action_done" string="Selesai Diperbaiki" type="object" class="oe_highlight" invisible="state not in ('in_progress', 'waiting_parts')"/>
+                    <button name="action_deliver" string="Serahkan ke Klien" type="object" class="btn-success" invisible="state != 'done'"/>
+                    <button name="action_cancel" string="Batalkan" type="object" invisible="state in ('done', 'delivered', 'cancelled')"/>
+                    <button name="action_draft" string="Set ke Draft" type="object" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,waiting_parts,done,delivered"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nomor Tiket"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Informasi Pelanggan">
+                            <field name="customer_name"/>
+                            <field name="customer_phone"/>
+                            <field name="customer_email"/>
+                            <field name="date_received"/>
+                            <field name="technician_id"/>
+                        </group>
+                        <group string="Informasi Perangkat &amp; Garansi">
+                            <field name="device_id"/>
+                            <field name="serial_number"/>
+                            <field name="purchase_date"/>
+                            <field name="warranty_status"/>
+                            <field name="date_completed" invisible="state not in ('done', 'delivered')"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Keluhan &amp; Diagnosa" name="notes">
+                            <group>
+                                <field name="problem_description" placeholder="Deskripsi keluhan dari pelanggan..."/>
+                                <field name="diagnosis_notes" placeholder="Hasil diagnosa kerusakan oleh teknisi..."/>
+                            </group>
+                        </page>
+                        <page string="Penggantian Suku Cadang" name="parts">
+                            <field name="part_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="part_code"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="subtotal"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="parts_cost"/>
+                                <field name="service_fee" readonly="warranty_status == 'active'"/>
+                                <field name="total_cost" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_service_ticket_search" model="ir.ui.view">
+        <field name="name">service.ticket.search</field>
+        <field name="model">service.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Cari Tiket Servis">
+                <field name="name" string="No. Tiket / Pelanggan" filter_domain="['|', ('name', 'ilike', self), ('customer_name', 'ilike', self)]"/>
+                <field name="serial_number"/>
+                <field name="device_id"/>
+                <field name="technician_id"/>
+                <separator/>
+                <filter name="filter_in_progress" string="Sedang Dikerjakan" domain="[('state', 'in', ('in_progress', 'waiting_parts'))]"/>
+                <filter name="filter_done" string="Selesai" domain="[('state', '=', 'done')]"/>
+                <filter name="filter_warranty" string="Garansi Aktif" domain="[('warranty_status', '=', 'active')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_technician" string="Teknisi" context="{'group_by': 'technician_id'}"/>
+                    <filter name="group_by_device" string="Model Perangkat" context="{'group_by': 'device_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_service_ticket" model="ir.actions.act_window">
+        <field name="name">Tiket Servis</field>
+        <field name="res_model">service.ticket</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_filter_in_progress': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Buat tiket servis baru
+            </p>
+        </field>
+    </record>
+</odoo>

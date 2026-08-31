@@ -1,0 +1,21 @@
+{
+    'name': 'Manajemen Perpustakaan',
+    'version': '17.0.1.0.0',
+    'category': 'Services/Library',
+    'summary': 'Kelola buku, anggota, dan peminjaman perpustakaan',
+    'author': 'Hafizh Irfansyah',
+    'license': 'LGPL-3',
+    'depends': ['base'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/library_sequence.xml',
+        'views/library_category_views.xml',
+        'views/library_book_views.xml',
+        'views/library_member_views.xml',
+        'views/library_loan_views.xml',
+        'views/library_menus.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

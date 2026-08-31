@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View (Tabel Pasien) -->
+    <record id="view_hospital_patient_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.tree</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="age"/>
+                <field name="gender"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Pasien</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Utama & Submenu -->
+    <menuitem id="menu_hospital_root" name="Rumah Sakit" sequence="10"/>
+    <menuitem id="menu_hospital_patient" name="Data Pasien" parent="menu_hospital_root" action="action_hospital_patient" sequence="10"/>
+</odoo>

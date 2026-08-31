@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_service_root" name="Service Center" sequence="20"/>
+
+    <!-- Submenus -->
+    <menuitem id="menu_service_ticket" name="Tiket Servis" parent="menu_service_root" action="action_service_ticket" sequence="10"/>
+    <menuitem id="menu_service_master" name="Master Data" parent="menu_service_root" sequence="20"/>
+    <menuitem id="menu_service_device" name="Master Perangkat" parent="menu_service_master" action="action_service_device" sequence="10"/>
+</odoo>

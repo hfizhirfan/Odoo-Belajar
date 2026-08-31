@@ -1,0 +1,4 @@
+﻿id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_service_device_user,service.device.user,model_service_device,base.group_user,1,1,1,1
+access_service_ticket_user,service.ticket.user,model_service_ticket,base.group_user,1,1,1,1
+access_service_ticket_part_user,service.ticket.part.user,model_service_ticket_part,base.group_user,1,1,1,1

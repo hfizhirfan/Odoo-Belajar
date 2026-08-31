@@ -1,0 +1,32 @@
+﻿# Python cache
+*.py[cod]
+__pycache__/
+*.so
+
+# Odoo Core & Environment
+/addons/
+/odoo/
+/debian/
+/doc/
+/setup/
+/.github/
+/.git-safe-config
+/.weblate.json
+/CONTRIBUTING.md
+/COPYRIGHT
+/LICENSE
+/MANIFEST.in
+/SECURITY.md
+/odoo-bin
+/requirements.txt
+/ruff.toml
+/setup.cfg
+/setup.py
+
+# Logs & temp
+*.log
+*.sqlite
+.env
+.venv/
+env/
+venv/
