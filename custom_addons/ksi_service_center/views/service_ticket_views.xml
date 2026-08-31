@@ -31,6 +31,7 @@
                     <button name="action_start_repair" string="Lanjut Servis" type="object" class="oe_highlight" invisible="state != 'waiting_parts'"/>
                     <button name="action_done" string="Selesai Diperbaiki" type="object" class="oe_highlight" invisible="state not in ('in_progress', 'waiting_parts')"/>
                     <button name="action_deliver" string="Serahkan ke Klien" type="object" class="btn-success" invisible="state != 'done'"/>
+                    <button name="%(action_report_service_ticket)d" string="Cetak Nota Servis" type="action" class="btn-primary"/>
                     <button name="action_cancel" string="Batalkan" type="object" invisible="state in ('done', 'delivered', 'cancelled')"/>
                     <button name="action_draft" string="Set ke Draft" type="object" invisible="state != 'cancelled'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,waiting_parts,done,delivered"/>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action Report -->
+    <record id="action_report_service_ticket" model="ir.actions.report">
+        <field name="name">Tanda Terima Servis</field>
+        <field name="model">service.ticket</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ksi_service_center.report_service_ticket_template</field>
+        <field name="report_file">ksi_service_center.report_service_ticket_template</field>
+        <field name="print_report_name">'Nota_Servis_' + (object.name or '').replace('/', '_')</field>
+        <field name="binding_model_id" ref="model_service_ticket"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- QWeb Template -->
+    <template id="report_service_ticket_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #333;">
+                        
+                        <!-- Header Nota -->
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <h2 style="font-weight: bold; color: #1a365d; margin-bottom: 2px;">NOTA TANDA TERIMA SERVIS</h2>
+                                <p class="text-muted" style="font-size: 12px;">PT Kreator Solusi Informasi - Authorized Service Partner Axioo</p>
+                            </div>
+                            <div class="col-4 text-end">
+                                <h4 style="font-weight: bold; color: #2b6cb0;"><span t-field="o.name"/></h4>
+                                <p style="margin: 0;">Status: <strong t-field="o.state"/></p>
+                                <p style="margin: 0;">Tgl Masuk: <span t-field="o.date_received"/></p>
+                            </div>
+                        </div>
+
+                        <hr style="border-top: 2px solid #2b6cb0; margin-bottom: 20px;"/>
+
+                        <!-- Info Pelanggan &amp; Perangkat -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div style="background-color: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                    <h6 style="font-weight: bold; color: #2d3748; border-bottom: 1px solid #cbd5e0; padding-bottom: 5px;">INFORMASI PELANGGAN</h6>
+                                    <table class="table table-borderless table-sm mb-0">
+                                        <tr>
+                                            <td style="width: 35%; padding: 2px 0; color: #718096;">Nama:</td>
+                                            <td style="padding: 2px 0;"><strong t-field="o.customer_name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px 0; color: #718096;">No. Telepon / WA:</td>
+                                            <td style="padding: 2px 0;"><span t-field="o.customer_phone"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px 0; color: #718096;">Email:</td>
+                                            <td style="padding: 2px 0;"><span t-field="o.customer_email"/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div style="background-color: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                    <h6 style="font-weight: bold; color: #2d3748; border-bottom: 1px solid #cbd5e0; padding-bottom: 5px;">INFORMASI PERANGKAT</h6>
+                                    <table class="table table-borderless table-sm mb-0">
+                                        <tr>
+                                            <td style="width: 40%; padding: 2px 0; color: #718096;">Model Perangkat:</td>
+                                            <td style="padding: 2px 0;"><strong t-field="o.device_id.name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px 0; color: #718096;">Nomor Seri (SN):</td>
+                                            <td style="padding: 2px 0;"><span t-field="o.serial_number"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px 0; color: #718096;">Status Garansi:</td>
+                                            <td style="padding: 2px 0;">
+                                                <span t-if="o.warranty_status == 'active'" class="badge bg-success">Garansi Aktif (Free)</span>
+                                                <span t-if="o.warranty_status == 'expired'" class="badge bg-danger">Garansi Habis</span>
+                                                <span t-if="o.warranty_status == 'unknown'" class="badge bg-secondary">Belum Terverifikasi</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keluhan &amp; Diagnosa -->
+                        <div class="mb-3 p-2" style="border: 1px solid #e2e8f0; border-radius: 6px;">
+                            <table class="table table-borderless table-sm mb-0">
+                                <tr>
+                                    <td style="width: 25%; font-weight: bold; color: #4a5568;">Keluhan Pelanggan:</td>
+                                    <td><span t-field="o.problem_description"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #4a5568;">Diagnosa Teknisi:</td>
+                                    <td><span t-field="o.diagnosis_notes"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; color: #4a5568;">Teknisi Bertugas:</td>
+                                    <td><span t-field="o.technician_id.name"/></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Tabel Suku Cadang -->
+                        <h6 style="font-weight: bold; color: #2d3748; margin-top: 15px;">RINCIAN PENGGANTIAN SUKU CADANG (SPARE PARTS)</h6>
+                        <table class="table table-sm table-bordered" style="margin-top: 8px; border-color: #cbd5e0;">
+                            <thead style="background-color: #edf2f7; color: #2d3748;">
+                                <tr>
+                                    <th style="width: 5%; text-align: center;">No</th>
+                                    <th>Nama Komponen / Spare Part</th>
+                                    <th>Kode Part</th>
+                                    <th style="width: 10%; text-align: center;">Qty</th>
+                                    <th style="width: 20%; text-align: right;">Harga Satuan</th>
+                                    <th style="width: 20%; text-align: right;">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="idx" t-value="1"/>
+                                <tr t-foreach="o.part_ids" t-as="part">
+                                    <td style="text-align: center;"><span t-esc="idx"/></td>
+                                    <td><span t-field="part.name"/></td>
+                                    <td><span t-field="part.part_code"/></td>
+                                    <td style="text-align: center;"><span t-field="part.quantity"/></td>
+                                    <td style="text-align: right;"><span t-field="part.price_unit"/></td>
+                                    <td style="text-align: right;"><span t-field="part.subtotal"/></td>
+                                    <t t-set="idx" t-value="idx + 1"/>
+                                </tr>
+                                <tr t-if="not o.part_ids">
+                                    <td colspan="6" class="text-center text-muted">Tidak ada penggantian suku cadang</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Total Ringkasan Biaya -->
+                        <div class="row justify-content-end">
+                            <div class="col-5">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Total Suku Cadang:</strong></td>
+                                        <td class="text-end"><span t-field="o.parts_cost"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Biaya Jasa Servis:</strong></td>
+                                        <td class="text-end">
+                                            <span t-if="o.warranty_status == 'active'" class="text-success">(Garansi Aktif) Rp 0</span>
+                                            <span t-else="" t-field="o.service_fee"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-top: 2px solid #2b6cb0;">
+                                        <td style="font-size: 15px;"><strong>TOTAL AKHIR:</strong></td>
+                                        <td class="text-end" style="font-size: 15px; font-weight: bold; color: #2b6cb0;">
+                                            <span t-field="o.total_cost"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Tanda Tangan -->
+                        <div class="row mt-5 text-center" style="margin-top: 40px;">
+                            <div class="col-6">
+                                <p style="margin-bottom: 60px;">Penerima / Pelanggan,</p>
+                                <p style="font-weight: bold; border-top: 1px solid #a0aec0; width: 60%; margin: 0 auto; padding-top: 5px;">
+                                    <span t-field="o.customer_name"/>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p style="margin-bottom: 60px;">Teknisi Penanggung Jawab,</p>
+                                <p style="font-weight: bold; border-top: 1px solid #a0aec0; width: 60%; margin: 0 auto; padding-top: 5px;">
+                                    <span t-field="o.technician_id.name"/>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
