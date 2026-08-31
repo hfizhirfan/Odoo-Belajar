@@ -109,3 +109,6 @@ class ServiceTicket(models.Model):
 
     def action_draft(self):
         self.write({'state': 'draft'})
+
+    def action_print_report(self):
+        return self.env.ref('ksi_service_center.action_report_service_ticket').report_action(self)
